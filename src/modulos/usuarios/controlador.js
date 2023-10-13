@@ -40,8 +40,22 @@ async function login(body) {
 
     const token = jwt.sign({ user: data[0].Usuario }, config.jwt.secret, { expiresIn: '1d' });
 
+    const datosUsuario = await db.query(TABLA, { Usuario: body.Usuario });        
+    const idRol = datosUsuario[0].idRol;
+    const permisos = await db.query("roles_has_permisos", { Roles_idRol: idRol });
+    
+    const arrayPermisos = []
+    let nombrePermiso
+
+    for(permiso of permisos){
+        nombrePermiso = await db.query("permisos", {idPermiso: permiso.Permisos_idPermiso})
+        console.log(nombrePermiso[0].Permiso)
+        arrayPermisos.push(nombrePermiso[0].Permiso)
+    }
+
     return {
-        token: token
+        token: token,
+        permisos: arrayPermisos
     };
 }
 
