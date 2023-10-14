@@ -5,7 +5,6 @@ const jwt = require('jsonwebtoken');
 
 const TABLA = 'usuarios';
 const COLUMNAID = 'idUsuario';
-const ESTATUS = "Activo";
 
 function todos() {
     return db.todos(TABLA);

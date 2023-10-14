@@ -5,6 +5,7 @@ const cors = require('cors');
 
 const roles = require('./modulos/roles/rutas');
 const usuarios = require('./modulos/usuarios/rutas');
+const pemrisosRoles = require('./modulos/permisosRoles/rutas');
 
 const error = require('./red/errors');
 
@@ -33,6 +34,7 @@ app.use(cors({
 // rutas
 app.use('/api/roles', roles)
 app.use('/api/usuarios', usuarios)
+app.use('/api/permisosRoles', pemrisosRoles)
 app.use(error);
 
 //exportamos app

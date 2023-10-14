@@ -43,10 +43,10 @@ function todos(tabla){
     });
 }
 
-// Encuentra por id
-function uno(tabla, COLUMNAID, idRol){
+// Encuentra uno
+function uno(tabla, COLUMNAID, id){
     return new Promise((resolve, reject)=>{
-        conexion.query(`SELECT * FROM ${tabla} WHERE ${COLUMNAID} = ${idRol}`, (error, result)=>{
+        conexion.query(`SELECT * FROM ${tabla} WHERE ${COLUMNAID} = ${id}`, (error, result)=>{
             if (error) return reject(error);
 
             if (result.length > 0) {
@@ -58,7 +58,16 @@ function uno(tabla, COLUMNAID, idRol){
     });
 }
 
-// Insertar Rol
+function unoCompuesto(id){
+    return  new Promise((resolve, reject)=>{
+        conexion.query(`select idRol, Rol, idPermiso, Permiso from roles,permisos, roles_has_permisos where Roles_idRol=${id} and Roles_idRol=idRol and Permisos_idPermiso = idPermiso;`, (error,result)=>{
+            return error ? reject(error) : resolve(result);
+        })
+    });
+
+}
+
+// Insertar
 function insertar(tabla, data){
     return new Promise((resolve, reject)=>{
         conexion.query(`INSERT INTO ${tabla} SET ?`, data, (error, result)=>{
@@ -67,31 +76,53 @@ function insertar(tabla, data){
     });
 }
 
-// Modificar Rol
+// Modificar
 function modificar(tabla, COLUMNAID, data){
+    let id = Object.values(data);
     return new Promise((resolve, reject)=>{
-        conexion.query(`UPDATE ${tabla} SET ? WHERE ${COLUMNAID} = ?`, [data, data.idRol], (error, result)=>{
+        conexion.query(`UPDATE ${tabla} SET ? WHERE ${COLUMNAID} = ?`, [data, id[0]], (error, result)=>{
             return error ? reject(error) : resolve(result);
         });
     });
 }
 
-// Agregar un Rol (modificar - insertar)
+// Agregar (modificar - insertar)
 function agregar(tabla, COLUMNAID, data){
-    if(data && data.idRol == 0){
+    let id = Object.values(data);
+    if(data && id[0] == 0){
         return insertar(tabla, data);
     }else{
         return modificar(tabla, COLUMNAID, data);
     }
 }
 
-// Elimina un rol
+function agregarCompuesto(tabla, data){
+    return  new Promise((resolve, reject)=>{
+        conexion.query(`INSERT INTO ${tabla} SET ?`,data, (error,result)=>{
+            return error ? reject(error) : resolve(result);
+        })
+    });
+
+}
+
+// Elimina
 function eliminar(tabla, COLUMNAID, data){
+    let id = Object.values(data);
     return new Promise((resolve, reject)=>{
-        conexion.query(`DELETE FROM ${tabla} WHERE ${COLUMNAID} = ?`, data.idRol, (error, result)=>{
+        conexion.query(`DELETE FROM ${tabla} WHERE ${COLUMNAID} = ?`, id[0], (error, result)=>{
             return error ? reject(error) : resolve(result);
         });
     });
+}
+
+function eliminarCompuesto(tabla, id){
+   
+    return  new Promise((resolve, reject)=>{
+        conexion.query(`DELETE FROM ${tabla} WHERE Roles_idRol=${id}`, (error,result)=>{
+            return error ? reject(error) : resolve(result);
+        })
+    });
+
 }
 
 function queryFlex(tabla, consulta){
@@ -132,8 +163,11 @@ function query(tabla, consulta){
 module.exports = {
     todos,
     uno,    
+    unoCompuesto,
     agregar,
+    agregarCompuesto,
     eliminar,
+    eliminarCompuesto,
     query,
     queryFlex    
 }
