@@ -105,6 +105,7 @@ function agregarCompuesto(tabla, data){
 
 }
 
+
 // Elimina
 function eliminar(tabla, COLUMNAID, data){
     let id = Object.values(data);
@@ -118,7 +119,7 @@ function eliminar(tabla, COLUMNAID, data){
 function eliminarCompuesto(tabla, id){
    
     return  new Promise((resolve, reject)=>{
-        conexion.query(`DELETE FROM ${tabla} WHERE Roles_idRol=${id}`, (error,result)=>{
+        conexion.query(`DELETE FROM ${tabla} WHERE Permisos_idPermiso=${id}`, (error,result)=>{
             return error ? reject(error) : resolve(result);
         })
     });

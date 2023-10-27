@@ -7,10 +7,9 @@ const router = express.Router();
 
 router.get('/', todos);
 router.get('/:id', uno);
-router.post('/idRol', permisosRol);
 router.post('/', agregar);
 
-router.put('/:id', eliminar)
+router.put('/', eliminar)
 
 async function todos(req, res, next) {
 
@@ -35,8 +34,14 @@ async function uno(req, res, next) {
 async function agregar(req, res, next) {
     try {
         const items = await controlador.agregar(req.body);
-        console.log(req.body)
-        respuesta.success(req, res, 'roles-permisos actualizados', 201);
+
+        if (req.body.idRoles == 0) {
+            mensaje = 'Item guardado con exito';
+        } else {
+            mensaje = 'Item actualizado con exito';
+        }
+
+        respuesta.success(req, res, mensaje, 201);
     } catch (error) {
         next(error);
     }
@@ -44,19 +49,10 @@ async function agregar(req, res, next) {
 
 async function eliminar(req, res, next) {
     try {
-        const items = await controlador.eliminar(req.params.id);
+        const items = await controlador.eliminar(req.body);
         respuesta.success(req, res, 'Item eliminado', 200);
     } catch (error) {
         next(error);
     }
 };
-
-async function permisosRol(req, res, next){
-    try {
-        const items = await controlador.permisosRol(req.body);
-        respuesta.success(req, res, items, 200);
-    } catch (error) {
-        next(error);
-    }
-}
 module.exports = router;

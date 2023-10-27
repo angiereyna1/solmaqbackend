@@ -7,14 +7,25 @@ const router = express.Router();
 
 router.get('/', todos);
 router.get('/:id', uno);
+router.post('/userid', unoPorUser);
 router.post('/', agregar);
 router.put('/', eliminar);
 router.post('/login',login);
+router.post('/permisos',consultarPermisos);
 router.post('/auth',verificacion);
 
 async function login(req, res, next){
     try {
         const token = await controlador.login(req.body);
+        respuesta.success(req, res, token, 200);
+    } catch (error) {
+        next(error);
+    }
+}
+
+async function consultarPermisos(req, res, next){
+    try {
+        const token = await controlador.consultarPermisos(req.body);
         respuesta.success(req, res, token, 200);
     } catch (error) {
         next(error);
@@ -87,6 +98,16 @@ async function eliminar(req, res, next) {
         respuesta.success(req, res, mensaje, 200);
     } catch(err) {
         next(err);
+    }
+};
+
+async function unoPorUser(req, res, next) {
+
+    try {
+        const items = await controlador.unoPorUser(req.body);
+        respuesta.success(req, res, items, 200);
+    } catch (error) {
+        next(error);
     }
 };
 

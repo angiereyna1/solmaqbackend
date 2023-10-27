@@ -58,6 +58,25 @@ async function login(body) {
     };
 }
 
+async function consultarPermisos(body){
+    const datosUsuario = await db.query(TABLA, { Usuario: body.Usuario });        
+    const idRol = datosUsuario[0].idRol;
+    const permisos = await db.query("roles_has_permisos", { Roles_idRol: idRol });
+    
+    const arrayPermisos = []
+    let nombrePermiso
+
+    for(permiso of permisos){
+        nombrePermiso = await db.query("permisos", {idPermiso: permiso.Permisos_idPermiso})
+        console.log(nombrePermiso[0].Permiso)
+        arrayPermisos.push(nombrePermiso[0].Permiso)
+    }
+
+    return {        
+        permisos: arrayPermisos
+    };
+}
+
 async function obtenerUsuarioDesdeToken(token) {
     try {
         const tokenWithoutBearer = extractTokenWithoutBearerPrefix(token);
@@ -108,11 +127,19 @@ async function permisos(req) {
     }
 }
 
+async function unoPorUser(user) {
+    console.log(user)
+    const resultado = await db.query(TABLA, user); 
+    return resultado[0].idRol;
+}
+
 module.exports = {
     todos,
     uno,
+    unoPorUser,
     agregar,
     eliminar,
     login,
-    permisos
+    consultarPermisos,
+    permisos    
 };
