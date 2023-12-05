@@ -6,8 +6,10 @@ const controlador = require('./controlador')
 const router = express.Router();
 
 router.get('/', todos);
+router.get('/nicks', nicks);
 router.get('/:id', uno);
 router.post('/userid', unoPorUser);
+router.post('/idUsuario', idPorUser);
 router.post('/', agregar);
 router.put('/', eliminar);
 router.post('/login',login);
@@ -34,14 +36,11 @@ async function consultarPermisos(req, res, next){
 
 async function verificacion(req ,res, next){
     try {
-        console.log(req.body)
-        //console.log(req.body.IdInterfaz)
-        //console.log(req.route)
-        //console.log(req.decoded)
+        console.log(req.body)                
         const admitido = await controlador.permisos(req);
         console.log(admitido)
         if(!admitido){
-            respuesta.error(req, res,{accepted:false, message:"No autorizado"}, 401);
+            respuesta.error(req, res,{accepted:false, message:"No autorizado"}, 403);
         }else{
             respuesta.success(req, res, {accepted:true, message:"Autorizado", user:admitido.user}, 200);
         }
@@ -67,6 +66,15 @@ async function uno(req, res, next) {
     } catch (error) {
         next(error);
 
+    }
+};
+
+async function nicks(req, res, next) {
+    try {
+        const items = await controlador.nicks();
+        respuesta.success(req, res, items, 200);
+    } catch (error) {
+        next(error);
     }
 };
 
@@ -105,6 +113,16 @@ async function unoPorUser(req, res, next) {
 
     try {
         const items = await controlador.unoPorUser(req.body);
+        respuesta.success(req, res, items, 200);
+    } catch (error) {
+        next(error);
+    }
+};
+
+async function idPorUser(req, res, next) {
+
+    try {
+        const items = await controlador.idPorUser(req.body);
         respuesta.success(req, res, items, 200);
     } catch (error) {
         next(error);

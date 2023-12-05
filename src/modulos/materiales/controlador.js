@@ -1,7 +1,7 @@
 const db = require('../../DB/mysql');
 
-const TABLA = 'empresasclientes';
-const COLUMNAID = 'idCliente';
+const TABLA = 'materiales';
+const COLUMNAID = 'idMaterial';
 const ESTATUS = "1";
  
 function todos(){
@@ -10,10 +10,6 @@ function todos(){
 
 function uno(id) {
     return db.uno(TABLA, COLUMNAID, id);
-}
-
-function rfcs() {
-    return db.column(TABLA, 'RFC');
 }
 
 function agregar(body){
@@ -27,7 +23,6 @@ function eliminar(body) {
 module.exports = {
     todos,
     uno,
-    rfcs,
     agregar,
     eliminar
 }

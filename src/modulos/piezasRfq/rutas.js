@@ -7,9 +7,8 @@ const router = express.Router();
 
 // Rutas de consulta
 router.get('/', todos);
-router.get('/rfcs', rfcs);
-router.get('/:id', uno);
-
+router.get('/:id', uno)
+router.post('/rfqid', unoPorRFQ);
 // Rutas para guardar (insertar o actualizar)
 router.post('/', agregar);
 // Rutas para eliminar
@@ -34,12 +33,12 @@ async function uno(req, res, next) {
     }
 };
 
-async function rfcs(req, res, next) {
-    try {
-        const items = await controlador.rfcs();
+async function uno(req, res, next) {
+    try{
+        const items = await controlador.uno(req.params.id);    
         respuesta.success(req, res, items, 200);
-    } catch (error) {
-        next(error);
+    }catch(err) {
+        next(err);
     }
 };
 
@@ -47,7 +46,7 @@ async function rfcs(req, res, next) {
 async function agregar(req, res, next) {
     try {
         const items = await controlador.agregar(req.body);
-        if (req.body.idCliente == 0) {
+        if (req.body.idPiezaRFQ == 0) {
             mensaje = 'Item guardado con exito';
         } else {
             mensaje = 'Item actualizado con exito';
@@ -73,5 +72,14 @@ async function eliminar(req, res, next) {
     }
 };
 
+async function unoPorRFQ(req, res, next) {
+
+    try {
+        const items = await controlador.unoPorRFQ(req.body);
+        respuesta.success(req, res, items, 200);
+    } catch (error) {
+        next(error);
+    }
+};
 
 module.exports = router;
