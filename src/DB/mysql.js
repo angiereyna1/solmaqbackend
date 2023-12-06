@@ -6,7 +6,7 @@ const config = require('../config');
 const caCertFilePath = './src/DigiCertGlobalRootCA.crt.pem';
 
 const dbconfig = {
-  host: config.mysql.host,
+  host: 'solmaqweb-mysql.mysql.database.azure.com',
   user: config.mysql.user,
   password: config.mysql.password,
   database: config.mysql.database,
