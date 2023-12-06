@@ -26,10 +26,20 @@ function eliminar(body) {
     return db.eliminar(TABLA, COLUMNAID, body);
 }
 
+function consultarPorFecha(fechas) {
+    return db.consultarPorFecha(fechas);
+}
+
+function consultarEstatusxFecha(fechas) {
+    return db.consultarEstatusxFecha(fechas);
+}
+
 module.exports = {
     todos,
     uno,    
     unoPorPedido,
     agregar,
-    eliminar
+    eliminar,
+    consultarPorFecha,
+    consultarEstatusxFecha
 }

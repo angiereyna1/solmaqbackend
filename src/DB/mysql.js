@@ -43,6 +43,51 @@ function todos(tabla){
     });
 }
 
+function consultarPorFecha(fechas) {    
+    const { fechaInicio, fechaFin } = fechas;
+
+    return new Promise((resolve, reject) => {
+        const query = `
+            SELECT ped.FechaPedido, ped.NoPedido, ec.RazonSocial AS NombreCliente, ped.Total
+            FROM pedidos ped
+            INNER JOIN usuarios usr ON ped.idUsuario = usr.idUsuario
+            INNER JOIN empresasclientes ec ON usr.idCliente = ec.idCliente
+            WHERE ped.FechaPedido >= ? AND ped.FechaPedido <= ?
+        `;
+
+        conexion.query(query, [fechaInicio, fechaFin], (error, result) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(result);
+            }
+        });
+    });
+}
+
+function consultarEstatusxFecha(fechas) {    
+    const { fechaInicio, fechaFin } = fechas;
+
+    return new Promise((resolve, reject) => {
+        const query = `
+            SELECT ped.FechaPedido, ped.NoPedido, ec.RazonSocial AS NombreCliente, ped.Estado AS Estatus
+            FROM pedidos ped
+            INNER JOIN usuarios usr ON ped.idUsuario = usr.idUsuario
+            INNER JOIN empresasclientes ec ON usr.idCliente = ec.idCliente
+            WHERE ped.FechaPedido >= ? AND ped.FechaPedido <= ?
+            AND ped.Estado != 0
+        `;
+
+        conexion.query(query, [fechaInicio, fechaFin], (error, result) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(result);
+            }
+        });
+    });
+}
+
 // Encuentra uno
 function uno(tabla, COLUMNAID, id){
     return new Promise((resolve, reject)=>{
@@ -236,5 +281,7 @@ module.exports = {
     eliminarCompuesto,
     query,
     queryFlex,  
-    agregarPieza
+    agregarPieza,
+    consultarPorFecha,
+    consultarEstatusxFecha
 }

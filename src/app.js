@@ -29,6 +29,10 @@ app.use(express.urlencoded({extended: true}));
 app.set('port', config.app.port)
 
 const whiteList = [process.env.ORIGIN1];
+
+console.log("Aquiiiiiiiiiii")
+console.log(whiteList);
+
 app.use(cors({
     origin: function(origin, callback){
         if(!origin || whiteList.includes(origin)){

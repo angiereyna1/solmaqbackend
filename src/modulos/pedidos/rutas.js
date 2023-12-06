@@ -9,6 +9,8 @@ const router = express.Router();
 router.get('/', todos);
 router.get('/:id', uno)
 router.post('/pedidoid', unoPorPedido);
+router.post('/consultarPorFecha', consultarPorFecha);
+router.post('/consultarEstatus', consultarEstatusxFecha);
 // Rutas para guardar (insertar o actualizar)
 router.post('/', agregar);
 // Rutas para eliminar
@@ -82,5 +84,25 @@ async function unoPorPedido(req, res, next) {
         next(error);
     }
 };
+
+async function consultarPorFecha(req, res, next) {
+    try {
+        const fechas = req.body; // Suponiendo que las fechas se envían en el cuerpo de la solicitud
+        const items = await controlador.consultarPorFecha(fechas);
+        respuesta.success(req, res, items, 200);
+    } catch (error) {
+        next(error);
+    }
+}
+
+async function consultarEstatusxFecha(req, res, next) {
+    try {
+        const fechas = req.body; // Suponiendo que las fechas se envían en el cuerpo de la solicitud
+        const items = await controlador.consultarEstatusxFecha(fechas);
+        respuesta.success(req, res, items, 200);
+    } catch (error) {
+        next(error);
+    }
+}
 
 module.exports = router;
