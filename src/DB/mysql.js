@@ -2,7 +2,7 @@ const mysql = require('mysql2');
 const config = require('../config');
 
 const dbconfig = {
-  host: 'solmaqweb-mysql.mysql.database.azure.com',
+  host: config.mysql.host,
   user: config.mysql.user,
   password: config.mysql.password,
   database: config.mysql.database,  
