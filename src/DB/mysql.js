@@ -1,18 +1,11 @@
 const mysql = require('mysql2');
-const fs = require('fs');
-const path = require('path');
 const config = require('../config');
-
-const caCertFilePath = './src/DigiCertGlobalRootCA.crt.pem';
 
 const dbconfig = {
   host: config.mysql.host,
   user: config.mysql.user,
   password: config.mysql.password,
-  database: config.mysql.database,
-  ssl: {
-    ca: fs.readFileSync(caCertFilePath)
-  }
+  database: config.mysql.database,  
 };
 
 let conexion;
